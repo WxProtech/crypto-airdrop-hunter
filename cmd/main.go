@@ -34,7 +34,7 @@ func main() {
 					&cli.IntFlag{Name: "index", Value: 0},
 				},
 				Action: func(c *cli.Context) error {
-					addr, err := wallet.DeriveEVMAddress(c.String("mnemonic"), c.Int("index"))
+					addr, err := wallet.DeriveEthereumAddress(c.String("mnemonic"), c.Int("index"))
 					if err != nil {
 						return err
 					}

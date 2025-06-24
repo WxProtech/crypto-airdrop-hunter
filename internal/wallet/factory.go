@@ -20,7 +20,7 @@ func GenerateMnemonic() (string, error) {
 }
 
 // DeriveEVMAddress derives an EVM-compatible address from the mnemonic and index
-func DeriveEVMAddress(mnemonic string, index int) (string, error) {
+func DeriveEthereumAddress(mnemonic string, index int) (string, error) {
 	wallet, err := hdwallet.NewFromMnemonic(mnemonic)
 	if err != nil {
 		return "", err
