@@ -42,6 +42,51 @@ func main() {
 					return nil
 				},
 			},
+			{
+				Name:  "aes",
+				Usage: "use aes algorithm to encrypt or decrypt mnemonic",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:     "mnemonic",
+						Usage:    "Mnemonic to encrypt or decrypt",
+						Required: true,
+					},
+					&cli.StringFlag{
+						Name:     "password",
+						Usage:    "password",
+						Required: true,
+					},
+					&cli.StringFlag{
+						Name:     "mode",
+						Usage:    "Operation mode: encrypt or decrypt",
+						Required: true,
+					},
+				},
+				Action: func(c *cli.Context) error {
+					mnemonic := c.String("mnemonic")
+					mode := c.String("mode")
+					password := c.String("password")
+
+					if mode != "encrypt" && mode != "decrypt" {
+						return fmt.Errorf("invalid mode: %s, must be 'encrypt' or 'decrypt'", mode)
+					}
+
+					if mode == "encrypt" {
+						encrypted, err := wallet.EncryptMnemonic(mnemonic, password)
+						if err != nil {
+							return err
+						}
+						fmt.Println("Encrypted:", encrypted)
+					} else {
+						decrypted, err := wallet.DecryptMnemonic(mnemonic, password)
+						if err != nil {
+							return err
+						}
+						fmt.Println("Decrypted:", decrypted)
+					}
+					return nil
+				},
+			},
 		},
 	}
 
