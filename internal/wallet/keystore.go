@@ -18,6 +18,7 @@ func deriveKey(password string) []byte {
 
 // EncryptMnemonic 加密助记词
 func EncryptMnemonic(mnemonic, password string) (string, error) {
+	// 如果为了安全性，需要改成成gcm模式的aes
 	key := deriveKey(password)
 	block, err := aes.NewCipher(key)
 	if err != nil {
