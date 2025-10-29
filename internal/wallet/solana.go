@@ -17,7 +17,16 @@ func DeriveSolanaKeyPair(mnemonic string, index uint32) (types.Account, error) {
 	}
 
 	seed := bip39.NewSeed(mnemonic, "")
-	derived := pbkdf2.Key(seed[:], []byte("ed25519 seed"), 2048, 32, sha512.New)
+
+	// incorporate the index into the derivation so different indices yield
+	// different key pairs. The salt format is not BIP-44 compliant but is
+	// sufficient for deterministic unique keys.
+	salt := []byte{
+		'e', 'd', '2', '5', '5', '1', '9', ' ', 's', 'e', 'e', 'd',
+		byte(index >> 24), byte(index >> 16), byte(index >> 8), byte(index),
+	}
+
+	derived := pbkdf2.Key(seed[:], salt, 2048, 32, sha512.New)
 
 	// # 生成solana的地址
 	account, err := types.AccountFromSeed(derived)
